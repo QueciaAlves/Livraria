@@ -50,7 +50,7 @@ const EditAuthor = () => {
             await updateDoc(docRef, {
                 nome: nome,
                 pseudonimo: pseudonimo,
-                datanasc: editora,
+                datanasc: datanasc, // Correção aqui
                 cidade: cidade,
                 pais: pais
             })
@@ -61,6 +61,7 @@ const EditAuthor = () => {
             alert('Erro ao editar dados!')
         }
     }
+    
 
     return (
         <>
