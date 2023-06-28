@@ -4,55 +4,55 @@ import { db } from '../../services/firebaseConnection'
 import { addDoc, collection, getDocs, doc, deleteDoc } from 'firebase/firestore'
 import {useNavigate} from 'react-router-dom'
 
-const MyBook = () => {
+const MyAuthor = () => {
 
-    const [titulo, setTitulo] = useState()
-    const [escritor, setEscritor] = useState()
-    const [editora, setEditora] = useState()
-    const [ano, setAno] = useState()
-    const [isbn, setISBN] = useState()
-    const [books, setBooks] = useState([])
+    const [nome, setNome] = useState() //nome do autor(a)
+    const [pseudonimo, setPseudonimo] = useState()//nome conhecido
+    const [datanasc, setNiver] = useState()//data de nascimento
+    const [cidade, setCidade] = useState()//cidade de nascimento
+    const [pais, setPais] = useState()//país de nascimento    
+    const [authors, setAuthors] = useState([])
     const navigate = useNavigate()
 
-    async function findAllBooks() {
-        const booksRef = collection(db, 'bookstore')
-        await getDocs(booksRef)
+    async function findAllAuthors() {
+        const authorsRef = collection(db, 'bookstore')
+        await getDocs(authorsRef)
             .then((snapshot) => {
                 let lista = []
                 snapshot.forEach((doc) => {
                     lista.push({
                         id: doc.id,
-                        titulo: doc.data().titulo,
-                        escritor: doc.data().escritor,
-                        editora: doc.data().editora,
-                        ano: doc.data().ano,
-                        isbn: doc.data().isbn
+                        nome: doc.data().nome,
+                        pseudonimo: doc.data().pseudonimo,
+                        datanasc: doc.data().datanasc,
+                        cidade: doc.data().cidade,
+                        pais: doc.data().pais
                     })
                 })
-                setBooks(lista)
+                setAuthors(lista)
             })
     }
 
     useEffect(() => {
-        findAllBooks()
-    }, [books])
+        findAllAuthors()
+    }, [authors])
 
 
-    async function registerBook(e) {
+    async function registerAuthor(e) {
         e.preventDefault()
         try {
             const docRef = await addDoc(collection(db, "bookstore"), {
-                titulo: titulo,
-                escritor: escritor,
-                editora: editora,
-                ano: ano,
-                isbn: isbn
+                nome: nome,
+                pseudonimo: pseudonimo,
+                datanasc: datanasc,
+                cidade: cidade,
+                pais: pais
             })
-            setTitulo('')
-            setEscritor('')
-            setEditora('')
-            setAno('')
-            setISBN('')
+            setNome('')
+            setPseudonimo('')
+            setNiver('')
+            setCidade('')
+            setPais('')
             alert('Gravou!')
         } catch (error) {
             console.log(error)
@@ -63,57 +63,57 @@ const MyBook = () => {
         const docRef = doc(db, 'bookstore', id)
         await deleteDoc(docRef)
             .then(() => {
-                alert('Livro excluído!')
+                alert('Autor excluído!')
             })
             .catch(() => {
                 alert('Erro ao apagar!')
             })
     }
 
-  function handleEdit(idBook){
-        navigate('/editBook',{state: {id:idBook}})
+  function handleEdit(idAuthor){
+        navigate('/editAuthor',{state: {id:idAuthor}})
     }
 
     return (
         <div className="container">
-            <form onSubmit={registerBook}>
+            <form onSubmit={registerAuthor}>
                 <Form.Group>
                     <Row>
                         <Col col="sm-6">
-                            <label>Título</label>
-                            <Form.Input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} />
+                            <label>Nome</label>
+                            <Form.Input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
                         </Col>
                     </Row>
                 </Form.Group>
                 <Form.Group>
                     <Row>
                         <Col col="sm-6">
-                            <label>Escritor</label>
-                            <Form.Input type="text" value={escritor} onChange={(e) => setEscritor(e.target.value)} />
+                            <label>Pseudônimo</label>
+                            <Form.Input type="text" value={pseudonimo} onChange={(e) => setPseudonimo(e.target.value)} />
                         </Col>
                     </Row>
                 </Form.Group>
                 <Form.Group>
                     <Row>
                         <Col col="sm-6">
-                            <label>Editora</label>
-                            <Form.Input type="text" value={editora} onChange={(e) => setEditora(e.target.value)} />
+                            <label>Data de Nascimento</label>
+                            <Form.Input type="text" value={datanasc} onChange={(e) => setNiver(e.target.value)} />
                         </Col>
                     </Row>
                 </Form.Group>
                 <Form.Group>
                     <Row>
                         <Col col="sm-6">
-                            <label>Ano</label>
-                            <Form.Input type="text" value={ano} onChange={(e) => setAno(e.target.value)} />
+                            <label>Cidade Natal</label>
+                            <Form.Input type="text" value={cidade} onChange={(e) => setCidade(e.target.value)} />
                         </Col>
                     </Row>
                 </Form.Group>
                 <Form.Group>
                     <Row>
                         <Col col="sm-6">
-                            <label>ISBN</label>
-                            <Form.Input type="text" value={isbn} onChange={(e) => setISBN(e.target.value)} />
+                            <label>País Natal</label>
+                            <Form.Input type="text" value={pais} onChange={(e) => setPais(e.target.value)} />
                         </Col>
                     </Row>
                 </Form.Group>
@@ -123,21 +123,21 @@ const MyBook = () => {
 
             <div className="container-table">
                 <br />
-                <h3>Lista de livros registrados:</h3>
+                <h3>Lista de autores registrados:</h3>
                 <ol>
                     {
-                        books.map((item) => (
+                        authors.map((item) => (
                             <li className='lista'
                                 key={item.id}>
-                                <b>Título:</b> {item.titulo}
+                                <b>Nome:</b> {item.nome}
                                 <br />
-                                <b>Escritor:</b> {item.escritor}
+                                <b>Pseudônimo:</b> {item.pseudonimo}
                                 <br />
-                                <b>Editora:</b> {item.editora}
+                                <b>Data de Nascimento:</b> {item.datanasc}
                                 <br />
-                                <b>Ano:</b> {item.ano}
+                                <b>Cidade Natal:</b> {item.cidade}
                                 <br />
-                                <b>ISBN:</b> {item.isbn}
+                                <b>País Natal:</b> {item.pais}
                                 <br />
                                 <button onClick={() => handleDelete(item.id)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
@@ -158,4 +158,4 @@ const MyBook = () => {
         </div>
     )
 }
-export default MyBook
+export default MyAuthor

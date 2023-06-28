@@ -6,28 +6,28 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../services/firebaseConnection'
 import {useNavigate} from 'react-router-dom'
 
-const EditBook = () => {
+const EditAuthor = () => {
 
-    const [titulo, setTitulo] = useState('')
-    const [escritor, setEscritor] = useState('')
-    const [editora, setEditora] = useState('')
-    const [ano, setAno] = useState('')
-    const [isbn, setISBN] = useState('')
+    const [nome, setNome] = useState('') //nome do autor(a)
+    const [pseudonimo, setPseudonimo] = useState('')//nome conhecido
+    const [datanasc, setNiver] = useState('')//data de nascimento
+    const [cidade, setCidade] = useState('')//cidade de nascimento
+    const [pais, setPais] = useState('')//país de nascimento
     const location = useLocation()
     const navigate = useNavigate()
 
     const id = location?.state?.id
 
-    async function findOneBook(){
+    async function findOneAuthor(){
         if(id !== ''){
-            const bookRef = doc(db, 'bookstore', id)
-            await getDoc(bookRef)
-            .then((book) => {
-                setTitulo(book.data().titulo),
-                setEscritor(book.data().escritor),
-                setEditora(book.data().editora),
-                setAno(book.data().ano),
-                setISBN(book.data().isbn)
+            const authorRef = doc(db, 'bookstore', id)
+            await getDoc(authorRef)
+            .then((author) => {
+                setNome(author.data().nome),
+                setPseudonimo(author.data().pseudonimo),
+                setNiver(author.data().datanasc),
+                setCidade(author.data().cidade),
+                setPais(author.data().pais)
             })
             .catch((erro) => {
                 alert(`Erro ao buscar ${erro}`)
@@ -36,11 +36,11 @@ const EditBook = () => {
     }
 
     useEffect(()=>{
-        findOneBook()
+        findOneAuthor()
     }, [])
 
     function handleBack(){
-        navigate('/book')
+        navigate('/author')
     }
 
     async function handleEditSave(e){
@@ -48,11 +48,11 @@ const EditBook = () => {
         try{
             const docRef = doc(db,"bookstore",id)
             await updateDoc(docRef, {
-                titulo: titulo,
-                escritor: escritor,
-                editora: editora,
-                ano: ano,
-                isbn: isbn
+                nome: nome,
+                pseudonimo: pseudonimo,
+                datanasc: editora,
+                cidade: cidade,
+                pais: pais
             })
             .then(()=>{
                 alert('Dados Atualizados!')
@@ -69,40 +69,40 @@ const EditBook = () => {
                     <Form.Group>
                         <Row>
                             <Col col="sm-6">
-                                <label>Título</label>
-                                <Form.Input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} />
+                                <label>Nome</label>
+                                <Form.Input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
                             </Col>
                         </Row>
                     </Form.Group>
                     <Form.Group>
                         <Row>
                             <Col col="sm-6">
-                                <label>Escritor</label>
-                                <Form.Input type="text" value={escritor} onChange={(e) => setEscritor(e.target.value)} />
+                                <label>Pseudônimo</label>
+                                <Form.Input type="text" value={pseudonimo} onChange={(e) => setPseudonimo(e.target.value)} />
                             </Col>
                         </Row>
                     </Form.Group>
                     <Form.Group>
                         <Row>
                             <Col col="sm-6">
-                                <label>Editora</label>
-                                <Form.Input type="text" value={editora} onChange={(e) => setEditora(e.target.value)} />
+                                <label>Data Nascimento</label>
+                                <Form.Input type="text" value={datanasc} onChange={(e) => setNiver(e.target.value)} />
                             </Col>
                         </Row>
                     </Form.Group>
                     <Form.Group>
                         <Row>
                             <Col col="sm-6">
-                                <label>Ano</label>
-                                <Form.Input type="text" value={ano} onChange={(e) => setAno(e.target.value)} />
+                                <label>Cidade Natal</label>
+                                <Form.Input type="text" value={cidade} onChange={(e) => setCidade(e.target.value)} />
                             </Col>
                         </Row>
                     </Form.Group>
                     <Form.Group>
                         <Row>
                             <Col col="sm-6">
-                                <label>ISBN</label>
-                                <Form.Input type="text" value={isbn} onChange={(e) => setISBN(e.target.value)} />
+                                <label>País Natal</label>
+                                <Form.Input type="text" value={pais} onChange={(e) => setPais(e.target.value)} />
                             </Col>
                         </Row>
                     </Form.Group>
@@ -113,4 +113,4 @@ const EditBook = () => {
         </>
     )
 }
-export default EditBook
+export default EditAuthor
