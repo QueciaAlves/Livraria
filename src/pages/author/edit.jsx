@@ -50,7 +50,7 @@ const EditAuthor = () => {
             await updateDoc(docRef, {
                 nome: nome,
                 pseudonimo: pseudonimo,
-                datanasc: datanasc, // Correção aqui
+                datanasc: datanasc, 
                 cidade: cidade,
                 pais: pais
             })
